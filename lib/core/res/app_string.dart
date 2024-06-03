@@ -1,0 +1,2 @@
+
+ String INVITEFRIEND="invite Friend";
