@@ -1,16 +1,16 @@
-import 'package:exam/core/config/get_it_configer.dart';
 import 'package:exam/core/res/app_string.dart';
 import 'package:exam/core/res/color/color_palyt.dart';
 import 'package:exam/core/res/style/app_style.dart';
 import 'package:exam/model/chat_model.dart';
 import 'package:exam/pages/invate_page.dart';
 import 'package:exam/pages/logIn_page.dart';
+
 import 'package:exam/service/chat_service.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatPage extends StatelessWidget {
   ChatPage({super.key});
+
   List<ChatModel> result = [];
 
   @override
@@ -19,158 +19,191 @@ class ChatPage extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            flex: 2,
+            flex: 1,
             child: Container(
               color: secondryColor,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 90, left: 23, bottom: 90),
-                child: Row(
-                  children: [
-                    InkWell(
-                      onTap: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LogInPage(),
-                          )),
-                      child: Container(
-                        // margin: EdgeInsets.only(left: 23, top: 90),
-                        width: 48,
-                        height: 48,
-                        child: Icon(Icons.arrow_back_ios_new_sharp,
-                            color: praimaryColor),
-                        decoration: BoxDecoration(
-                          color: BackgroundColor,
+              width: double.maxFinite,
+              child: Row(
+                children: [
+                  InkWell(
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => InvitePage(),
+                        )),
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 35),
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
-                        ),
+                          color: BackgroundColor),
+                      child: const Icon(
+                        Icons.arrow_back_ios_new_sharp,
+                        color: praimaryColor,
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(left: 75, right: 75),
-                      width: 157,
-                      height: 30,
-                      child: Text(
-                        INVITEFRIEND,
-                        style: styletitelChatPage,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        //core.get<SharedPreferences>().clear();
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => InvitePage()));
-                      },
-                      child: Container(
-                        width: 48,
-                        height: 48,
-                        child: Icon(Icons.delete, color: praimaryColor),
-                        decoration: BoxDecoration(
-                          color: BackgroundColor,
+                  ),
+                  const Spacer(),
+                  Text(INVITEFRIENDS, style: titelChatPageStyle),
+                  const Spacer(),
+                  InkWell(
+                    onTap: () => Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LogInPage(),
+                        )),
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 35),
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
-                        ),
+                          color: BackgroundColor),
+                      child: const Icon(
+                        Icons.delete,
+                        color: praimaryColor,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
           Expanded(
-            flex: 4,
-            child: FutureBuilder(
-              future: ChatServiceImp().getChat(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  List<ChatModel> chat = snapshot.data as List<ChatModel>;
-                  result = chat;
-                  return StatefulBuilder(
-                    builder: (context, setState) {
-                      return Column(
-                        children: [
-                          Container(
-                            color: BackgroundColor,
-                            width: 550,
-                            height: 40,
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: SizedBox(
-                                    width: 300,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 40),
-                                      child: TextField(
-                                        onChanged: (value) {
-                                          result = [];
-                                          setState() {
-                                            chat.forEach(
-                                              (element) {
-                                                if (element.name
-                                                    .contains(value)) {
-                                                  result.add(element);
-                                                }
-                                              },
-                                            );
-                                          }
-                                        },
-                                        decoration: InputDecoration(
-                                          hintStyle: styletitelSearch,
-                                          hintText: "search here ...",
-                                          prefixIcon: const Icon(Icons.search,
-                                              color: ButtomColor),
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                          ),
-                                        ),
-                                      ),
+            flex: 3,
+            child: Container(
+              width: double.maxFinite,
+              color: BackgroundColor,
+              child: FutureBuilder(
+                future: ChatServiceImp().getChat(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<ChatModel> chat = snapshot.data as List<ChatModel>;
+                    result = chat;
+                    return StatefulBuilder(
+                      builder: (context, setState) {
+                        return Column(
+                          children: [
+                            Container(
+                              width: 380,
+                              height: 42,
+                              //color:secondryColor ,
+                              margin:
+                                  const EdgeInsets.only(top: 30, bottom: 10),
+                              child: TextField(
+                                onChanged: (value) {
+                                  result = [];
+                                  setState(() {
+                                    chat.forEach((element) {
+                                      if (element.name.contains(value)) {
+                                        result.add(element);
+                                      }
+                                    });
+                                  });
+                                },
+                                decoration: InputDecoration(
+                                  prefixIcon: const Icon(Icons.search),
+                                  prefixIconColor: ButtomColor,
+                                  hintText: "    Search here ...",
+                                  suffixIcon: const Icon(Icons.mic_rounded),
+                                  suffixIconColor: MessageColor,
+                                  hintStyle: styletitelSearch,
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: ButtomColor,
                                     ),
+                                  ),
+                                  filled: true,
+                                  fillColor: secondryColor,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                          Container(
-                            color: BackgroundColor,
-                            height: 405,
-                            width: 550,
-                            child: ListView.builder(
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  width: 362,
-                                  height: 54,
-                                  child: ListTile(
-                                    leading: CircleAvatar(
-                                      backgroundImage: NetworkImage(
-                                          snapshot.data![index].image),
-                                    ),
-                                    title: Text(snapshot.data![index].name,
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w500,
-                                            color: praimaryColor)),
-                                    subtitle: Text(
-                                      snapshot.data![index].message,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 16,
-                                        color: Color(0xFF9C9797),
+                            SizedBox(
+                              height: 450,
+                              child: ListView.builder(
+                                itemCount: result.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    margin: EdgeInsets.only(top: 10, left: 20),
+                                    child: ListTile(
+                                      leading: CircleAvatar(
+                                        backgroundImage: NetworkImage(
+                                            result[index].image),
+                                      ),
+                                      title: Row(
+                                        children: [
+                                          Text(result[index].name,
+                                              style: contactNameStyle),
+                                          Container(
+                                            margin: EdgeInsets.only(left: 10),
+                                            width: 15,
+                                            height: 15,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                color: LetterColor),
+                                            child: Center(
+                                              child: Text(
+                                                  result[index]
+                                                      .unreadMessageCount
+                                                      .toString(),
+                                                  style: unreadMessageStyle),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      subtitle: Text(
+                                        result[index].message,
+                                        style: messageStyle,
                                       ),
                                     ),
-                                  ),
-                                );
-                              },
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    return Column(
+                      children: [
+                        Container(
+                          width: 380,
+                          height: 42,
+                          //color:secondryColor ,
+                          margin: const EdgeInsets.only(top: 30, bottom: 10),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              prefixIcon: const Icon(Icons.search),
+                              prefixIconColor: ButtomColor,
+                              hintText: "    Search here ...",
+                              suffixIcon: const Icon(Icons.mic_rounded),
+                              suffixIconColor: MessageColor,
+                              hintStyle: styletitelSearch,
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: ButtomColor,
+                                ),
+                              ),
+                              filled: true,
+                              fillColor: secondryColor,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
                             ),
                           ),
-                        ],
-                      );
-                    },
-                  );
-                } else
-                  return CircularProgressIndicator();
-              },
+                        ),
+                        const CircularProgressIndicator(),
+                      ],
+                    );
+                  }
+                },
+              ),
             ),
           ),
         ],
